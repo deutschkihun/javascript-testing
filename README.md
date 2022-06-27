@@ -1,5 +1,4 @@
 # javascript testing
 
-## node testing
-
-## react testing
+- node testing
+- react testing
