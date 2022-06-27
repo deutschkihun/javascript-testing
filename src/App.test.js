@@ -1,6 +1,11 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { Home } from './components/Home/Home';
-import { Login } from './components/Login/Login'
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { Home } from './components/Page/Home';
+import { Login } from './components/Page/Login'
+import { NotFound } from './components/Page/NotFound';
+import App from './App';
+import { createMemoryHistory } from 'history';
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+
 
 jest.mock("axios", () => ({
   __esModule: true,
@@ -12,6 +17,9 @@ jest.mock("axios", () => ({
   },
 }));
 
+afterEach(cleanup)
+
+// unit test 
 test('renders learn react link', () => {
   render(<Home />);
   const linkElement = screen.getByText(/learn react/i); // handling upper and lower case of alphabet
@@ -31,12 +39,12 @@ test('renders learn react link with testid', () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-test('renders 3 list items', () => {
+test('renders 4 list items', () => {
   render(<Home />);
   const listItem = screen.getAllByRole('listitem')
-  expect(listItem).toHaveLength(3)
-  expect(listItem.length).toBe(3)
-  expect(listItem.length).toEqual(3)
+  expect(listItem).toHaveLength(4)
+  expect(listItem.length).toBe(4)
+  expect(listItem.length).toEqual(4)
 });
 
 test('render title', () => {
@@ -58,6 +66,10 @@ test('sum should be 6', () => {
 // jest
 // javascript testing library and it allows us to run our test and it determines whether the tests pass 
 // or fail, it takes our expectation and compare with the actual result and it's called an assertion
+
+
+// Fire Event 
+// Basically used when we want to trigger any specific event on an object
 
 test('usename input should be empty', () => {
   render(<Login/>)
@@ -157,3 +169,41 @@ test('loading text in button should not be rendered after fetching', async () =>
 // technically we can copy the part that we are communicating with backend or fetching position to testing code 
 // but test should be independent of other factors like backend. If backend server is down, your test gonna be always fail
 // we use mock
+
+
+// router unit testing
+
+describe("app routing unit test", () => {
+  test('when rendering <App /> with endpoint "/"', () => {
+    render(<App />);
+    const textElement = screen.getByText(/learn react/i);
+    const navbar = screen.getByTestId('navbar');
+    const link = screen.getByTestId('deutschkihun')
+
+    expect(textElement).toBeInTheDocument();
+    expect(navbar).toContainElement(link)
+  })
+
+  test('when rendering <Menu/> with endpoint "/menu"', async () => {
+    render(<App />);
+    const link = screen.getByTestId('menu')
+    fireEvent.click(link)
+  })
+
+  test('routing에 해당되지 않는 path인 경우 /notfound 로 렌더링 되는가?', () => {
+    const history = createMemoryHistory()
+    history.push('/some/bad/route')
+
+    render(
+      <BrowserRouter>
+        <Routes>
+          <Route path="*" element={<NotFound/>} />
+        </Routes>
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText(/404-notfound/i)).toBeInTheDocument()
+    const notfound = screen.getByTestId('404-notfound')
+    expect(notfound).toBeInTheDocument()
+  });
+})

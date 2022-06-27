@@ -19,13 +19,15 @@ export const Home = () => {
           >
             Learn React
           </a>
-          <ul>
+          <ul data-testid="navbar">
             <li>apple</li>
             <li>peach</li>
             <li>watermelon</li>
+            <li data-testid="deutschkihun">deutschkihun</li>
           </ul>
           <h1 data-testid="title">hello</h1>
           <span title="sum">{a+b}</span>
+          <a href='/menu' data-testid='menu'>Go to menu page</a>
         </header>
       </div>
     );
