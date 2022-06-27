@@ -1,35 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route as Router, BrowserRouter } from "react-router-dom";
+import { Home } from './components/Home/Home';
+import { Login } from './components/Login/Login';
 
-function App() {
-  const a = 2;
-  const b = 4;
+function App () {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          data-testid="customId"
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <ul>
-          <li>apple</li>
-          <li>peach</li>
-          <li>watermelon</li>
-        </ul>
-        <h1 data-testid="title">hello</h1>
-        <span title="sum">{a+b}</span>
-      </header>
-    </div>
-  );
+    <BrowserRouter>
+        <Routes>
+          <Router exact path="/" element={<Home />}  />
+          <Router exact path="/login" element={<Login/>} />
+        </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;
