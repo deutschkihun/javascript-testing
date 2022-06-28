@@ -1,18 +1,11 @@
 # node-testing
 
-## mocking
-
 ## body parser 
 
 https://semtax.tistory.com/7
-https://www.daleseo.com/js-module-import/
 
 
-# Must Know TDD (Test Driven Development) 
-
-> Test Driven Development is a way to development application parall with testing
-
-## TDD advantages ? 
+## TDD (test driven development, first test code and then real code) 
 
     * Reducing debugging time 
     
