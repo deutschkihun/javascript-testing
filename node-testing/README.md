@@ -1,10 +1,5 @@
 # node-testing
 
-## body parser 
-
-https://semtax.tistory.com/7
-
-
 ## TDD (test driven development, first test code and then real code) 
 
     * Reducing debugging time 
