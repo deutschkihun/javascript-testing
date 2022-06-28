@@ -1,7 +1,3 @@
 export default {
-    testEnvironment: 'node',
-    type:module
+    testEnvironment: 'node'
 }
-
-// https://stackoverflow.com/questions/35756479/does-jest-support-es6-import-export
-
