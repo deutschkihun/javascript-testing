@@ -87,14 +87,6 @@ This is what we called integration test. In this project **[SuperTests](https://
 1. Verifing whether each test modules integrate well 
 2. Figuring out the error or bug while integration.
  
- 
-### 3. jest.config.js
-
-In order to use jest in node.js environment, you need to configure jest setup to match with node.js. This project is using nosql(mongoose) as a database. Unfortunately, jest is running based on jsdom, but mongoose doesn't support jsdom. Therefore we need to change a default environment from jsdom to node. While converting process, you might get some errors that you need to understand carfully. 
-
--  module is not defined in ES module scope
-- Error: Jest: Failed to load ESM at ....jest.config.js - did you use a default export?
-
 reference 
 * https://www.section.io/engineering-education/guide-to-create-mock-server/
 * https://mswjs.io/docs/getting-started/integrate/browser
