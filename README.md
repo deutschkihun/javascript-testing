@@ -86,7 +86,7 @@ This is what we called integration test. In this project **[SuperTests](https://
 
 For running node-testing, please add .env file in root folder of node-testing with following format 
 
-MONGO_URI='mongodb+srv://<username>:<password>@kihun.fnvav.mongodb.net/<dbname>?retryWrites=true&w=majority'
+MONGO_URI='mongodb+srv://[username]:[password]@kihun.fnvav.mongodb.net/[dbname]?retryWrites=true&w=majority'
 
 **Why Integration Test ?** 
 
