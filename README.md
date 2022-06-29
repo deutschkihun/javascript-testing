@@ -82,6 +82,12 @@ If you have performed the unit test first to confirm that the modules are workin
 This is what we called integration test. In this project **[SuperTests](https://www.npmjs.com/package/supertest)** will be used 
 
 
+### notice 
+
+For running node-testing, please add .env file in root folder of node-testing with following format 
+
+MONGO_URI='mongodb+srv://<username>:<password>@kihun.fnvav.mongodb.net/<dbname>?retryWrites=true&w=majority'
+
 **Why Integration Test ?** 
 
 1. Verifing whether each test modules integrate well 
