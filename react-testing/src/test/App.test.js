@@ -1,11 +1,13 @@
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { Home } from './components/Page/Home';
-import { Login } from './components/Page/Login'
-import { NotFound } from './components/Page/NotFound';
-import App from './App';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { Home } from '../components/Page/Home';
+import { Login } from '../components/Page/Login'
+import { NotFound } from '../components/Page/NotFound';
+import App from '../App';
 import { createMemoryHistory } from 'history';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
 
+// https://testing-library.com/docs/user-event/intro/#difference-to-fireevent
 
 jest.mock("axios", () => ({
   __esModule: true,
@@ -70,6 +72,11 @@ test('sum should be 6', () => {
 
 // Fire Event 
 // Basically used when we want to trigger any specific event on an object
+// 엄밀히 얘기해서 사용자가 <input> 엘리먼트에 데이터를 입력할 때는, change 이벤트 뿐만 아니라 focus, keydown, keyup과 같은 다양한 이벤트가 발생합니다. 
+// 따라서 React Testing Library에 내장되어 있는 fireEvent를 사용하면, 실제로 발생해야하는 모든 유저 이벤트를 발생되지 않는다는 단점이 있습니다.
+
+// User event 
+// user-event is a companion library for Testing Library that provides more advanced simulation of browser interactions than the built-in fireEvent method.
 
 test('usename input should be empty', () => {
   render(<Login/>)
@@ -103,49 +110,56 @@ test('error message should not be visible', () => {
   expect(errorElement).not.toBeVisible();
 })
 
-test('usename input should be changed', () => {
+test('usename input should be changed', async () => {
   render(<Login/>)
   const userInputElement = screen.getByPlaceholderText(/username/i);
   const testValue = 'test';
 
-  fireEvent.change(userInputElement, {target: {value: testValue}});
+  // fireEvent.change(userInputElement, {target: {value: testValue}});
+  await userEvent.type(userInputElement,testValue)
   expect(userInputElement.value).toBe(testValue);
 })
 
-test('password input should be changed', () => {
+test('password input should be changed', async () => {
   render(<Login/>)
   const passwordInputElement = screen.getByPlaceholderText(/password/i);
   const testValue = 'test';
 
-  fireEvent.change(passwordInputElement, {target: {value: testValue}});
+  //fireEvent.change(passwordInputElement, {target: {value: testValue}});
+  await userEvent.type(passwordInputElement,testValue)
   expect(passwordInputElement.value).toBe(testValue);
 })
 
-test('button should not be disabled when input exist', () => {
+test('button should not be disabled when input exist', async () => {
   render(<Login/>)
   const buttonElement = screen.getByRole('button');
   const userInputElement = screen.getByPlaceholderText(/username/i);
   const passwordInputElement = screen.getByPlaceholderText(/password/i);
   const testValue = 'test';
 
-  fireEvent.change(userInputElement, {target: {value: testValue}});
-  fireEvent.change(passwordInputElement, {target: {value: testValue}});
+  //fireEvent.change(userInputElement, {target: {value: testValue}});
+  //fireEvent.change(passwordInputElement, {target: {value: testValue}});
+
+  await userEvent.type(userInputElement,testValue);
+  await userEvent.type(passwordInputElement,testValue);
 
   expect(buttonElement).not.toBeDisabled()
 })
 
-test('loading text in button should be rendered when click login button', () => {
+test('loading text in button should be rendered when click login button', async () => {
   render(<Login />)
   const buttonElement = screen.getByRole('button');
   const userInputElement = screen.getByPlaceholderText(/username/i);
   const passwordInputElement = screen.getByPlaceholderText(/password/i);
   const testValue = 'test';
 
-  fireEvent.change(userInputElement, {target: {value: testValue}});
-  fireEvent.change(passwordInputElement, {target: {value: testValue}});
-  fireEvent.click(buttonElement)
+  // fireEvent.change(userInputElement, {target: {value: testValue}});
+  // fireEvent.change(passwordInputElement, {target: {value: testValue}});
+  // fireEvent.click(buttonElement)
 
-  expect(buttonElement).toHaveTextContent(/please wait/i)
+  await userEvent.type(userInputElement,testValue)
+  await userEvent.type(passwordInputElement,testValue)
+  await userEvent.click(buttonElement)
 })
 
 test('loading text in button should not be rendered after fetching', async () => {
@@ -155,23 +169,20 @@ test('loading text in button should not be rendered after fetching', async () =>
   const passwordInputElement = screen.getByPlaceholderText(/password/i);
   const testValue = 'test';
 
-  fireEvent.change(userInputElement, {target: {value: testValue}});
-  fireEvent.change(passwordInputElement, {target: {value: testValue}});
-  fireEvent.click(buttonElement)
+  // fireEvent.change(userInputElement, {target: {value: testValue}});
+  // fireEvent.change(passwordInputElement, {target: {value: testValue}});
+  // fireEvent.click(buttonElement)
+
+  await userEvent.type(userInputElement,testValue)
+  await userEvent.type(passwordInputElement,testValue)
+  await userEvent.click(buttonElement)
 
   const user = await screen.findByText('John')
   await waitFor(() => expect(buttonElement).not.toHaveTextContent(/please wait/i))
   expect(user).toBeInTheDocument();
 })
 
-// mocking
-// why we need mocking 
-// technically we can copy the part that we are communicating with backend or fetching position to testing code 
-// but test should be independent of other factors like backend. If backend server is down, your test gonna be always fail
-// we use mock
-
-
-// router unit testing
+/* router unit testing */
 
 describe("app routing unit test", () => {
   test('when rendering <App /> with endpoint "/"', () => {
@@ -187,7 +198,8 @@ describe("app routing unit test", () => {
   test('when rendering <Menu/> with endpoint "/menu"', async () => {
     render(<App />);
     const link = screen.getByTestId('menu')
-    fireEvent.click(link)
+    //fireEvent.click(link)
+    await userEvent.click(link)
   })
 
   test('routing에 해당되지 않는 path인 경우 /notfound 로 렌더링 되는가?', () => {
